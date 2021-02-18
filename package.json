@@ -1,0 +1,35 @@
+{
+  "name": "tenderd-fullstack-challenge",
+  "version": "1.0.0",
+  "description": "Tenderd ReactJS Full Stack Challenge",
+  "repository": "github.com/macphilips/tenderd-fullstack-challenge.git",
+  "author": "Morolari Titilope",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "yarn workspace client test --watchAll=false && yarn workspace server test",
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server start:dev",
+    "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn client\""
+  },
+  "dependencies": {
+    "concurrently": "^5.3.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.2.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "test"
+    }
+  },
+  "lint-staged": {
+    "*.ts*": [
+      "prettier --write"
+    ]
+  }
+}

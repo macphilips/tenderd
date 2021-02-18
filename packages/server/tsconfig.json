@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["ES2019"],
+    "baseUrl": "./src"
+  },
+  "include": ["src"],
+  "exclude": ["./dist", "./src/test"]
+}
