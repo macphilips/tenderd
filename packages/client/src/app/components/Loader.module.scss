@@ -1,0 +1,8 @@
+@import "src/app/styles/Colors";
+
+.root {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: calc(100vh - 60px);
+}

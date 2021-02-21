@@ -1,0 +1,140 @@
+@import "src/app/styles/Colors";
+
+$containerWidth: 100%;
+
+.root {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  width: $containerWidth;
+
+  .autocompleteDropdown {
+    position: relative;
+    width: $containerWidth;
+
+    .input {
+      display: flex;
+      flex: 1;
+      font-size: 16px;
+      padding: 16px;
+      background: none;
+      border: 1px solid $gray-light;
+      border-radius: 0;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+      &:focus {
+        outline: 0;
+        border-color: $main;
+
+        ~ .inputArrow {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .inputArrow {
+      cursor: pointer;
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    label {
+      display: flex;
+      transform: translate(16px, -38px);
+      color: rgba($white, 0.5);
+      transition: all 0.25s ease;
+      -webkit-backface-visibility: hidden;
+      pointer-events: none;
+      font-size: 16px;
+
+      .req {
+        margin: 2px;
+        color: $main;
+      }
+
+      &.highlight {
+        color: $white;
+      }
+    }
+
+    input:focus + label,
+    input:valid + label {
+      transform: translate(0, -76px);
+      transition: all 0.2s ease-out;
+
+      .req {
+        opacity: 0;
+      }
+    }
+
+    &.light {
+      input,
+      label {
+        color: $gray-light;
+      }
+    }
+
+    &.dark {
+      input,
+      label {
+        color: $white;
+      }
+    }
+  }
+
+  .input,
+  .list {
+    border: none;
+    box-sizing: border-box;
+    width: $containerWidth;
+  }
+
+  .listContainer {
+    box-shadow: 0 8px 15px 0 rgba(33, 33, 33, 0.2);
+    opacity: 0;
+    position: relative;
+    transform: scaleY(0);
+    visibility: hidden;
+    transform-origin: center top;
+    transition: all 0.3s ease;
+    width: $containerWidth;
+
+    &.show {
+      opacity: 1;
+      transform: scaleY(1);
+      visibility: visible;
+    }
+
+    .list {
+      align-content: center;
+      display: flex;
+      flex-wrap: wrap;
+      max-height: 11.5em;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      width: $containerWidth;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      z-index: 2;
+
+      .item {
+        cursor: pointer;
+        padding: 16px;
+        transition: background 0.5s ease;
+        width: $containerWidth;
+
+        &:hover {
+          background: #ccc;
+        }
+
+        span {
+          box-sizing: border-box;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

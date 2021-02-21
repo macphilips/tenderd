@@ -6,7 +6,7 @@ const apiDocsOptions = {
   customSiteTitle: "Tenderd Fullstack challenge API Docs"
 }
 
-const host = process.env.BASE_URL
+const host = process.env.BASE_HOST
 
 export default (app: Application, basePath: string) => {
   const config = swaggerJSDoc({
@@ -24,7 +24,7 @@ export default (app: Application, basePath: string) => {
       securityDefinitions: {},
       security: []
     },
-    apis: ["./**/*.routes.ts"]
+    apis: ["./**/*.routes.ts","./**/*.controller.ts"]
   })
 
   app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(config, apiDocsOptions))

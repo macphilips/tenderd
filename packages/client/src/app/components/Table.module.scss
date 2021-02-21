@@ -1,0 +1,124 @@
+@import "src/app/styles/Colors";
+
+.root {
+  table {
+    border-collapse: collapse;
+
+    &.fullWidth {
+      width: 100%;
+    }
+
+    thead tr {
+      background-color: #f2f2f2;
+    }
+
+    td,
+    th {
+      text-align: left;
+      padding: 16px;
+    }
+
+    tr:not(:last-child) {
+      td,
+      th {
+        border-bottom: 1px solid #dddddd;
+      }
+    }
+  }
+
+  tbody tr {
+    .tableAction {
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    &:hover {
+      background-color: #f2f2f2;
+
+      .tableAction {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  .tableAction {
+    .hint {
+      display: flex;
+      justify-content: center;
+      text-decoration: none;
+      //display: inline-block;
+      width: 25px;
+      height: 18px;
+      vertical-align: top;
+      z-index: 2;
+      position: relative;
+      cursor: pointer;
+
+      &:hover {
+        &[data-hint]:before,
+        &[data-hint]:after {
+          visibility: visible;
+          opacity: 1;
+          -webkit-transform: translate3d(0, 15px, 0);
+          transform: translate3d(0, 15px, 0);
+        }
+      }
+
+      &:before,
+      &:after {
+        top: 75%;
+        right: 50%;
+      }
+
+      &:before {
+        margin-right: -6px !important;
+      }
+
+      &:after {
+        margin-right: -11px;
+      }
+
+      &[data-hint]:before {
+        content: "";
+        position: absolute;
+        background: 0 0;
+        border: 6px solid transparent;
+        border-bottom-color: #383838;
+        margin-left: -5px;
+        margin-top: -12px;
+        z-index: 1000001;
+      }
+
+      &[data-hint]:after {
+        content: attr(data-hint);
+        background: #383838;
+        color: #fff;
+        text-shadow: 0 -1px 0 #000;
+        padding: 3px 9px;
+        font-size: 10px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        text-decoration: none;
+        text-transform: none;
+        text-indent: 0;
+        border-radius: 4px;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      &[data-hint]:before,
+      &[data-hint]:after {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        z-index: 1000000;
+        pointer-events: none;
+        -webkit-transition: 0.2s ease;
+        transition: 0.2s ease;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+    }
+  }
+}

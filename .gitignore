@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/packages/client//.pnp
+/packages/client/.pnp
 /packages/client/.pnp.js
 **/node_modules/*
 
@@ -22,6 +22,6 @@
 **/.env.production.local
 **/.idea/
 
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
+**/*.log*
+/packages/server/src/app/serviceAccountKey.json
+/packages/client/src/firebase-config.json

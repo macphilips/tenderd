@@ -1,0 +1,67 @@
+@import "src/app/styles/Colors";
+
+.fieldWrap {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    display: flex;
+    flex: 1;
+    font-size: 16px;
+    padding: 16px;
+    background: none;
+    border: 1px solid $gray-light;
+    border-radius: 0;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+    &:focus {
+      outline: 0;
+      border-color: $main;
+    }
+  }
+
+  label {
+    display: flex;
+    transform: translate(16px, -38px);
+    color: rgba($white, 0.5);
+    transition: all 0.25s ease;
+    -webkit-backface-visibility: hidden;
+    pointer-events: none;
+    font-size: 16px;
+
+    .req {
+      margin: 2px;
+      color: $main;
+    }
+
+    &.highlight {
+      color: $white;
+    }
+  }
+
+  input:focus + label,
+  input:valid + label {
+    transform: translate(0, -76px);
+    transition: all 0.2s ease-out;
+
+    .req {
+      opacity: 0;
+    }
+  }
+
+  &.light {
+    input,
+    label {
+      color: $gray-light;
+    }
+  }
+
+  &.dark {
+    input,
+    label {
+      color: $white;
+    }
+  }
+}

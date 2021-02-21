@@ -1,0 +1,23 @@
+@import "../../styles/Colors";
+
+.root {
+  margin-top: 32px;
+
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #d7dbdd;
+  }
+
+  .tab {
+    text-decoration: none;
+    cursor: pointer;
+    padding: 5px 30px;
+    color: #16a2d7;
+    font-size: 12px;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab.active {
+    border-bottom-color: #4ebbe4;
+  }
+}

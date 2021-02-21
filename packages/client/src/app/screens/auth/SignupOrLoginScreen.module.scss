@@ -1,0 +1,42 @@
+@import "../../styles/Colors";
+
+.root {
+  background: rgba($form-bg, 0.9);
+  padding: 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: $br;
+  box-shadow: 0 4px 10px 4px rgba($form-bg, 0.3);
+
+  div.tabGroup {
+    display: flex;
+    padding: 0;
+    margin: 0 0 40px 0;
+
+    .tab {
+      width: 50%;
+    }
+
+    .tab a {
+      display: block;
+      text-decoration: none;
+      padding: 15px;
+      background: rgba($gray-light, 0.25);
+      color: $gray-light;
+      font-size: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.5s ease;
+
+      &:hover {
+        background: $main-dark;
+        color: $white;
+      }
+
+      &.active {
+        background: $main;
+        color: $white;
+      }
+    }
+  }
+}
