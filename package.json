@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "yarn workspace client test --watchAll=false && yarn workspace server test",
-    "build": "yarn workspace client build --watchAll=false && yarn workspace server build",
+    "build": "yarn workspace client build && yarn workspace server build",
     "client": "yarn workspace client start",
     "server": "yarn workspace server start:dev",
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn client\""
