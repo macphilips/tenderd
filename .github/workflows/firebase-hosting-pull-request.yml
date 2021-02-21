@@ -12,7 +12,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TENDERD_E2088 }}'
-          projectId: tenderd-e2088
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TENDERD_28498 }}'
+          projectId: tenderd-28498
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels

@@ -19,9 +19,7 @@
   },
   "functions": {
     "source": "packages/server",
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run build"
-    ],
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
     "runtime": "nodejs12"
   },
   "storage": {
