@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
     "build:prod": "tsc",
-    "clean": "rm -rf dist && mkdir dist",
-    "build": "yarn clean && yarn build:prod",
-    "serve": "node --require dotenv/config dist/server.js",
-    "start": "NODE_ENV=production yarn build && yarn serve",
+    "clean": "rm -rf lib && mkdir lib",
+    "serve:local": "node --require dotenv/config dist/server.js",
+    "start:local": "NODE_ENV=production yarn build && yarn serve:local",
     "start:dev": "nodemon --require dotenv/config --config nodemon.json src/app/server.ts",
-    "lint": "node_modules/.bin/eslint ./src",
     "lint:fix": "yarn lint --fix",
     "test": "NODE_ENV=test jest --no-cache  --detectOpenHandles --runInBand --forceExit"
   },
@@ -52,5 +58,6 @@
     "ts-node": "^9.1.1",
     "tslint": "^6.0.0",
     "typescript": "^4.1.5"
-  }
+  },
+  "main": "lib/index.js"
 }

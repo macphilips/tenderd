@@ -25,3 +25,4 @@
 **/*.log*
 /packages/server/src/app/serviceAccountKey.json
 /packages/client/src/firebase-config.json
+/packages/server/lib/
