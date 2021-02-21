@@ -24,7 +24,7 @@ export default (app: Application, basePath: string) => {
       securityDefinitions: {},
       security: []
     },
-    apis: ["./**/*.routes.ts","./**/*.controller.ts"]
+    apis: ["./**/*.routes.ts", "./**/*.controller.ts"]
   })
 
   app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(config, apiDocsOptions))

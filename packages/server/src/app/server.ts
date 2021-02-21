@@ -1,6 +1,6 @@
 import debug from "debug"
 import http, { Server } from "http"
-import { app } from "./index"
+import { app } from "./app"
 
 /**
  * Create HTTP server.

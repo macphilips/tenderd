@@ -1,3 +1,4 @@
+import { Application } from "express"
 import registerApiDoc from "./api-docs"
 import registerExample from "./example/example.routes"
 import registerCompany from "./company/company.routes"
@@ -5,7 +6,6 @@ import registerRequest from "./request/request.routes"
 import registerAuthRoutes from "./auth/auth.routes"
 import registerUser from "./user/user.routes"
 import { registerErrorHandler } from "./errors"
-import { Application } from "express"
 import { Services } from "../config"
 import { secureRoutes } from "../middlewares/verifyToken"
 
