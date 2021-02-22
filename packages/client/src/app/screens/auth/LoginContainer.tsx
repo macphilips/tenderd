@@ -8,16 +8,12 @@ export function LoginContainer() {
   const history = useHistory()
 
   const onLogin = async ({ email, password }: Login) => {
-    try {
-      await auth.login(email, password)
-      const user = await auth.getCurrentUser()
-      if (user.companyId) {
-        return history.replace("/dashboard")
-      } else {
-        history.push("/auth/select-company")
-      }
-    } catch (e) {
-      console.log(e)
+    await auth.login(email, password)
+    const user = await auth.getCurrentUser()
+    if (user.companyId) {
+      return history.replace("/dashboard")
+    } else {
+      history.push("/auth/select-company")
     }
   }
   return <LoginForm onSubmit={onLogin} />
