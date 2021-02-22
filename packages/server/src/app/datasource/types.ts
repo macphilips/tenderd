@@ -1,9 +1,13 @@
+interface Model {
+  model: string
+}
 enum RequestType {
   REPLACEMENT = "Replacement",
   MAINTENANCE = "Maintenance",
   DEMOBILISATION = "Demobilisation",
   BREAKDOWN = "Breakdown"
 }
+
 enum RequestStatus {
   CREATED = "Created",
   IN_PROGRESS = "InProgress",
@@ -17,11 +21,13 @@ export interface User {
   email: string
   password: string
   companyId?: string
+  model: "User"
 }
 
 export interface Company {
   id: string
   name: string
+  model: "Company"
 }
 
 export interface Request {
@@ -32,13 +38,17 @@ export interface Request {
   status: RequestStatus
   userId: string
   companyId: string
+  createdAt: string
+  updatedAt: string
+  model: "Request"
 }
 
-export interface RequestEventLogType {}
+export enum RequestEventLogType {}
 
 export interface RequestEventLog {
   itemId: string
-  type: RequestEventLog
+  type: RequestEventLogType
   actorId: string
   timestamp: string
+  model: "RequestEventLog"
 }
