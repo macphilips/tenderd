@@ -15,12 +15,8 @@ export const secureRoutes = (
     const authUserId = await auth.verifyToken(token ?? "")
     const user = await userRepo.getUserById(authUserId)
 
-    // if (!user || (user && !user.companyId)) {
-    //   throw new HttpError("ERR_01", 400, "companyId")
-    // }
-
     ;(req as any).authUserId = authUserId
-    ;(req as any).authUserId = user?.name
+    ;(req as any).authUserName = user?.name
     ;(req as any).companyId = user?.companyId
 
     next()
