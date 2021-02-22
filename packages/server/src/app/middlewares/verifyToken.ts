@@ -1,15 +1,27 @@
-import AuthService from "../modules/auth/auth.service"
 import { IncomingHttpHeaders } from "http"
 import { NextFunction, Request, Response } from "express"
 import { errorCatcher } from "../modules/errors"
+import { Services } from "../config"
 
-export const secureRoutes = (auth: AuthService, baseApiURL: string) =>
+export const secureRoutes = (
+  { auth, user: userRepo }: Services,
+  baseApiURL: string
+) =>
   errorCatcher(async (req: Request, res: Response, next: NextFunction) => {
     const token = getAuthToken(req.headers)
     if (token === null && doesNotRequireAuthentication(req, baseApiURL)) {
       return next()
     }
-    ;(req as any).authUserId = await auth.verifyToken(token ?? "")
+    const authUserId = await auth.verifyToken(token ?? "")
+    const user = await userRepo.getUserById(authUserId)
+
+    // if (!user || (user && !user.companyId)) {
+    //   throw new HttpError("ERR_01", 400, "companyId")
+    // }
+
+    ;(req as any).authUserId = authUserId
+    ;(req as any).companyId = user?.companyId
+
     next()
   })
 
@@ -28,6 +40,7 @@ const doesNotRequireAuthentication = (request: Request, baseApiURL: string) => {
   const { path, url, method } = request
   return (
     (path.startsWith("/docs/api") && method === "GET") ||
-    path.startsWith(`${baseApiURL}/auth/signup`)
+    (path.startsWith(`${baseApiURL}/auth/signup`) && method === "POST") ||
+    (path.startsWith(`${baseApiURL}/companies`) && method === "GET") // temporarily allow
   )
 }

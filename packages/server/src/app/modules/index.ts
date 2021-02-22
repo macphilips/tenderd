@@ -12,7 +12,7 @@ import { secureRoutes } from "../middlewares/verifyToken"
 const basePath = "/api/v1"
 
 const routes = (app: Application, services: Services) => {
-  app.use(secureRoutes(services.auth, basePath))
+  app.use(secureRoutes(services, basePath))
 
   registerApiDoc(app, basePath)
   registerExample(app, basePath)
