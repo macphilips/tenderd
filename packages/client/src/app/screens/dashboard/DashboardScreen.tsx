@@ -58,7 +58,7 @@ export function Main() {
   if (loading) return <Loader />
 
   const dateFormatter = (value: Moment) =>
-    moment(value).format("DD/MM/YYY HH:mm")
+    moment(value).format("DD/MM/YYYY HH:mm")
   return (
     <div className={[styles.root, ""].join(" ")}>
       <div className={styles.header}>
@@ -89,11 +89,14 @@ export function Main() {
             formatter: dateFormatter
           }
         ]}
-        actions={[{ title: "Edit", icon: "pencil-alt" }]}
+        actions={[
+          { title: "View", icon: "eye" },
+          { title: "Edit", icon: "pencil-alt" }
+        ]}
         onActionItemClick={(title, data) => {
           if (title === "Edit") {
             history.push(`${url}/edit/${data.id}`)
-          } else if (title === "view") {
+          } else if (title === "View") {
             history.push(`${url}/view/${data.id}`)
           }
         }}

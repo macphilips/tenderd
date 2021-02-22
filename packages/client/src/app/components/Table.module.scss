@@ -28,6 +28,7 @@
 
   tbody tr {
     .tableAction {
+      display: flex;
       visibility: hidden;
       opacity: 0;
     }
@@ -43,6 +44,9 @@
   }
 
   .tableAction {
+    .item:not(:last-child) {
+      margin-right: 8px;
+    }
     .hint {
       display: flex;
       justify-content: center;

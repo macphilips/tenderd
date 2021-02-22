@@ -72,7 +72,7 @@ function TableAction(props: {
       {actions.map((action) => (
         <span
           data-hint={action.title}
-          className={styles.hint}
+          className={`${styles.item} ${styles.hint}`}
           key={action.title}
           onClick={() => onActionItemClick(action.title)}
         >

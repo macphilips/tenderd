@@ -6,7 +6,11 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt"
 import { faTrash } from "@fortawesome/free-solid-svg-icons/faTrash"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt"
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
-import { faEdit, faPenAlt } from "@fortawesome/free-solid-svg-icons"
+import {
+  faEdit,
+  faPenAlt,
+  faPencilAlt
+} from "@fortawesome/free-solid-svg-icons"
 import { faPen } from "@fortawesome/free-solid-svg-icons/faPen"
 import { faEye } from "@fortawesome/free-solid-svg-icons/faEye"
 
@@ -22,6 +26,7 @@ export const loadIcons = () => {
     faEdit,
     faPen,
     faPenAlt,
-    faEye
+    faEye,
+    faPencilAlt
   )
 }

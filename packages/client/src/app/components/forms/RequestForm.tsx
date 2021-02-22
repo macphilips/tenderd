@@ -124,7 +124,6 @@ export function RequestForm(props: Props) {
     try {
       setSaving(true)
       setUploadStatus(`Uploading files ${files.length}`)
-      console.log(`Uploading files ${files.length}`)
       const urls = await api.uploadFiles(files)
       const { assignedUserId, companyId } = request
       const assignedUserName =
@@ -138,8 +137,7 @@ export function RequestForm(props: Props) {
         companyName,
         resources: [...request.resources, ...urls]
       })
-      console.log(`Uploaded`)
-      setUploadStatus(`Uploaded`)
+      setUploadStatus(``)
     } catch (e) {
       setSaving(false)
       showNotification("Failed to save changes")
