@@ -47,8 +47,8 @@ Once build is successfully, we need to start up the Firebase emulator
 To ensure that your installation is successful you'll need to run tests.
 The command: `yarn test` makes this possible. It isn't functional right now, but once it's done you'll be notified via the README.
 
-## [API Documentation](https://tenderd-doc.herokuapp.com/docs/v1/)
-This application uses swagger to document it API and the full API docs can be located [here](https://tenderd-doc.herokuapp.com/docs/v1/).
+## [API Documentation](https://tenderd-doc.herokuapp.com/docs/api)
+This application uses swagger to document it API and the full API docs can be located [here](https://tenderd-doc.herokuapp.com/docs/api).
 All URIs are relative to the base url.
 Base url: `localhost:5000/docs/api/v1`
 
