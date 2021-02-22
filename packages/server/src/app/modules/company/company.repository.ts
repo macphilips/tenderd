@@ -1,5 +1,5 @@
 import { firestore } from "firebase-admin/lib/firestore"
-import { Repository, toJSON } from "../../datasource"
+import { Repository } from "../../datasource"
 import { Company } from "../../datasource/types"
 import { CompanyModel, TaggedModel } from "../../datasource/models"
 
@@ -15,27 +15,24 @@ export type PageableRequest = {
 }
 
 class CompanyRepository extends Repository<Company> {
+  protected model
   constructor(protected firestore: firestore.Firestore) {
     super(firestore)
+    this.model = CompanyModel
   }
 
   async findById(companyId: string) {
     return this.findByPK(CompanyModel.key({ id: companyId }))
   }
 
-  async findAllCompanies(pageable?: PageableRequest) {
-    // Just returns all three companies added manually to the application
-    // TODO implement pagination
-    const docs = await this.firestore.collection("Company").limit(3).get()
-    const result: Company[] = []
-    docs.forEach((doc) => {
-      result.push(toJSON<Company>(doc.data()))
-    })
-    if (result.length === 0) {
+  async findAllCompanies() {
+    const { results } = await this.findAll()
+    if (results.length === 0) {
       return await this.initCompanies()
     }
-    return result
+    return results
   }
+
   async initCompanies(): Promise<Company[]> {
     const companies: Company[] = [
       { id: "company-123", name: "Rancho", model: "Company" },
@@ -45,7 +42,7 @@ class CompanyRepository extends Repository<Company> {
 
     //TODO: Add a createAll method in Repository and update here.
     const promises = companies.map((company) =>
-      this.create(CompanyModel.create<Company>(company))
+      this.create(CompanyModel.create(company))
     )
     await Promise.all(promises)
 

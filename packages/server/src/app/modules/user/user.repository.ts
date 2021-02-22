@@ -1,12 +1,14 @@
-import { Repository, toJSON } from "../../datasource"
+import { Repository } from "../../datasource"
 import { firestore } from "firebase-admin/lib/firestore"
 import { User } from "../../datasource/types"
 import { UserModel } from "../../datasource/models"
 import { PageableRequest, PageableResult } from "../company/company.repository"
 
 class UserRepository extends Repository<User> {
+  protected model
   constructor(protected firestore: firestore.Firestore) {
     super(firestore)
+    this.model = UserModel
   }
   async getUserById(
     userId: string
@@ -31,17 +33,12 @@ class UserRepository extends Repository<User> {
     pageable?: PageableRequest
   ): Promise<PageableResult<User>> {
     // TODO implement pagination
-    const results: User[] = await this.findAllBy("User", "companyId", companyId)
+    const results: User[] = await this.findAllBy("companyId", companyId)
     return { results, cursor: null }
   }
 
   async findAllUsers(): Promise<PageableResult<User>> {
-    const docs = await this.firestore.collection("User").limit(25).get()
-    const results: User[] = []
-    docs.forEach((doc) => {
-      results.push(toJSON<User>(doc.data()))
-    })
-    return { results, cursor: null }
+    return await this.findAll()
   }
 }
 

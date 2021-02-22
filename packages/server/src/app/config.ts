@@ -3,7 +3,6 @@ import AuthService from "./modules/auth/auth.service"
 import UserRepository from "./modules/user/user.repository"
 import RequestRepository from "./modules/request/request.repository"
 import CompanyRepository from "./modules/company/company.repository"
-import { Repository } from "./datasource"
 
 // const serviceAccount = require("./serviceAccountKey.json")
 // const options = {
@@ -19,15 +18,13 @@ export type Services = {
   user: UserRepository
   request: RequestRepository
   company: CompanyRepository
-  datasource: Repository<any>
 }
 
 export const createServices: () => Services = () => {
   const firestore = admin.firestore()
-  const datasource = new Repository(firestore)
   const user = new UserRepository(firestore)
   const auth = new AuthService(admin.auth(), user)
   const request = new RequestRepository(firestore)
   const company = new CompanyRepository(firestore)
-  return { auth, user, request, company, datasource }
+  return { auth, user, request, company }
 }

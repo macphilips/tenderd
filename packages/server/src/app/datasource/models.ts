@@ -8,11 +8,11 @@ export type CollectionKeys<T extends TaggedModel> = {
   tableName: string
 }
 
-class Model<T extends TaggedModel, U extends keyof T> {
+export class Model<T extends TaggedModel, U extends keyof T> {
   constructor(
     private tableName: string,
-    private name: string,
-    private pkField: U
+    public name: string,
+    public pkField: U
   ) {}
 
   key(param: { [X in U]: string }): CollectionKeys<T> {
@@ -54,4 +54,4 @@ export const CompanyModel = model<Company>("Company").pk("id")
 
 export const RequestEventLogModel = model<RequestEventLog>(
   "RequestEventLog"
-).pk("itemId")
+).pk("id")
