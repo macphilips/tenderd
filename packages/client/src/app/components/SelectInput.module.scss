@@ -60,6 +60,7 @@ $containerWidth: 100%;
       }
     }
 
+    input:not(input[value=""]) + label,
     input:focus + label,
     input:valid + label {
       transform: translate(0, -76px);

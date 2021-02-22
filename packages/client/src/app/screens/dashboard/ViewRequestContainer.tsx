@@ -30,9 +30,9 @@ export function ViewRequestContainer() {
   return (
     <div className="container">
       <div>
-        <Link to="/dashboard">{"<Back to Dashboard"}</Link>&nbsp;
-        <h1>View Request {requestId}</h1>
+        <h1>View Request</h1>
       </div>
+      <br />
       <RequestForm
         initialValue={request}
         onSubmit={async () => {}}

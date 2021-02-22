@@ -183,7 +183,7 @@ export function RequestForm(props: Props) {
           required={true}
           label="Assign Author"
         />
-        {disabled && (
+        {!disabled && (
           <Button loading={saving} label="Save" onClick={onSubmit} />
         )}
       </form>

@@ -41,6 +41,7 @@
     }
   }
 
+  input:not(input[value=""]):not(input:focus) + label,
   input:focus + label,
   input:valid + label {
     transform: translate(0, -76px);
