@@ -1,15 +1,20 @@
 import CompanyRepository from "./company.repository"
 import { Request, Response } from "express"
+import { Services } from "../../config"
+import UserRepository from "../user/user.repository"
+import HttpError from "../errors/HttpError"
 
 class Controller {
   private repository: CompanyRepository
+  private userRepository: UserRepository
   /**
    * @constructor
    *
-   * @param {CompanyRepository} repository
+   * @param {CompanyRepository} services
    */
-  constructor(repository: CompanyRepository) {
-    this.repository = repository
+  constructor(services: Services) {
+    this.repository = services.company
+    this.userRepository = services.user
   }
 
   /**
@@ -29,7 +34,17 @@ class Controller {
    *           $ref: '#/definitions/ApiResponse'
    */
   async addAuthUserToCompany(req: Request, res: Response) {
-    return Promise.resolve(undefined)
+    const { companyId } = req.params
+    const company = this.repository.findById(companyId)
+    if (!company) throw new HttpError("COMP_01", 400)
+
+    const { authUserId } = req as any
+    await this.userRepository.updateUser({ id: authUserId, companyId })
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully removed company from company"
+    })
   }
 
   /**
@@ -55,7 +70,18 @@ class Controller {
    */
   async removeUserFromCompany(req: Request, res: Response) {
     // ensure authenticated user cannot remove themselves
-    return Promise.resolve(undefined)
+    const { userId } = req.params
+    const { authUserId } = req as any
+    if (authUserId === userId) throw new HttpError("AUTH_03", 403)
+
+    // const user = this.userRepository.getUserById(userId)
+    // if (!user) throw new HttpError("USR_02", 400)
+
+    await this.userRepository.updateUser({ id: userId, companyId: undefined })
+    return res.status(200).json({
+      success: true,
+      message: "Successfully removed user from company"
+    })
   }
 
   /**
@@ -79,12 +105,9 @@ class Controller {
    *                $ref: '#/definitions/Company'
    */
   async getAllCompanies(req: Request, res: Response) {
+    const companies = await this.repository.findAllCompanies()
     res.status(200).json({
-      companies: [
-        { id: "company-123", name: "Rancho" },
-        { id: "company-124", name: "Tendern" },
-        { id: "company-125", name: "CNN" }
-      ]
+      companies
     })
   }
 
@@ -114,7 +137,11 @@ class Controller {
    *                $ref: '#/definitions/User'
    */
   async getUsersByCompany(req: Request, res: Response) {
-    return Promise.resolve(undefined)
+    const { companyId } = req.params
+    const {
+      results: users
+    } = await this.userRepository.findAllUsersByCompanyId(companyId)
+    res.status(200).json({ users })
   }
 
   /**
@@ -137,16 +164,11 @@ class Controller {
    *              items:
    *                $ref: '#/definitions/User'
    */
-  getUsersWithinAuthUserCompany(req: Request, res: Response) {
-    const users = [
-      { id: "123", name: "Titilope Morolari", email: "tmorolari@gmail.com" },
-      {
-        id: "124",
-        name: "Michael Jackson",
-        email: "michael.jasckson@gmail.com"
-      },
-      { id: "126", name: "Kobe Bryant", email: "kobe.bryant@gmail.com" }
-    ]
+  async getUsersWithinAuthUserCompany(req: Request, res: Response) {
+    const { companyId } = req as any
+    const {
+      results: users
+    } = await this.userRepository.findAllUsersByCompanyId(companyId)
     res.status(200).json({ users })
   }
 }

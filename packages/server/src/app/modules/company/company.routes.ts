@@ -92,5 +92,5 @@ export default (
   baseUrl: string,
   services: Services
 ): CommonRoutesConfig[] => [
-  new CompanyRoutes(app, baseUrl, new CompanyController(services.company))
+  new CompanyRoutes(app, baseUrl, new CompanyController(services))
 ]
