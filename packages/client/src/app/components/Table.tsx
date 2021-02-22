@@ -1,10 +1,15 @@
 import React from "react"
-import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome"
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconProps
+} from "@fortawesome/react-fontawesome"
 import styles from "./Table.module.scss"
+import { Moment } from "moment"
 
 type Column<T> = {
   label: string
   field: keyof T
+  formatter?: (value: any) => string
 }
 
 type Action = { title: string; icon: FontAwesomeIconProps["icon"] }
@@ -21,17 +26,17 @@ export function Table<T extends { id: string }>(props: Props<T>) {
     data,
     actions = [],
     fullWidth = false,
-    onActionItemClick = (_, __) => {
-    }
+    onActionItemClick = (_, __) => {}
   } = props
   const showAction = actions.length > 0
   const columns = props.columns.map(({ label }) => <th key={label}>{label}</th>)
 
   const rows = data.map((row) => (
     <tr key={`row-${row["id"]}`}>
-      {props.columns.map(({ field }) => (
-        <td key={`${row["id"]}-${row[field]}`}>{row[field]}</td>
-      ))}
+      {props.columns.map(({ field, formatter }) => {
+        const value = formatter ? formatter(row[field]) : row[field]
+        return <td key={`${row["id"]}-${value}`}>{value}</td>
+      })}
       {showAction && (
         <td key={`${row["id"]}-action`}>
           <TableAction
@@ -49,7 +54,7 @@ export function Table<T extends { id: string }>(props: Props<T>) {
     <div className={styles.root}>
       <table className={fullWidth ? styles.fullWidth : ""}>
         <thead>
-        <tr>{columns}</tr>
+          <tr>{columns}</tr>
         </thead>
         <tbody>{rows}</tbody>
       </table>
@@ -61,10 +66,7 @@ function TableAction(props: {
   actions: Action[]
   onActionItemClick?: (title: string) => void
 }) {
-  const {
-    actions, onActionItemClick = (_) => {
-    }
-  } = props
+  const { actions, onActionItemClick = (_) => {} } = props
   return (
     <span className={styles.tableAction}>
       {actions.map((action) => (

@@ -7,6 +7,7 @@ $containerWidth: 100%;
   display: flex;
   flex-direction: column;
   width: $containerWidth;
+  position: relative;
 
   .autocompleteDropdown {
     position: relative;
@@ -94,7 +95,9 @@ $containerWidth: 100%;
   .listContainer {
     box-shadow: 0 8px 15px 0 rgba(33, 33, 33, 0.2);
     opacity: 0;
-    position: relative;
+    position: absolute;
+    z-index: 99;
+    top: 70%;
     transform: scaleY(0);
     visibility: hidden;
     transform-origin: center top;

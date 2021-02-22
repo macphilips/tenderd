@@ -37,6 +37,7 @@ export function ProfileContainer() {
     try {
       await api.updateUser(user)
     } catch (e) {
+      //TODO: Show notification
     }
   }
 

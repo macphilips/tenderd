@@ -18,7 +18,7 @@ export function CompanyUserList() {
         setLoading(true)
         const [loggedInUser, { users }] = await Promise.all([
           auth.getCurrentUser(),
-          api.getUsers()
+          api.getUsersWithinAuthUserCompany()
         ])
         setLoggedInUser(loggedInUser)
         setUsers(users)
@@ -39,7 +39,7 @@ export function CompanyUserList() {
         return
       }
       await api.removeUserFromCompany(data.id)
-      await api.getUsers()
+      await api.getUsersWithinAuthUserCompany()
     } catch (e) {
       // TODO: show error
     }

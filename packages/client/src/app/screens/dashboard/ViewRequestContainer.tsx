@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
 import { Request } from "../../services/types"
 import { Loader } from "../../components/Loader"
+import { RequestForm } from "../../components/forms/RequestForm"
 
 export function ViewRequestContainer() {
   const { requestId } = useParams<{ requestId: string }>()
@@ -18,6 +19,8 @@ export function ViewRequestContainer() {
         setRequest(request)
       } catch (e) {
         //TODO: Show error notification
+      } finally {
+        setLoading(false)
       }
     }
     getRequestById()
@@ -30,68 +33,11 @@ export function ViewRequestContainer() {
         <Link to="/dashboard">{"<Back to Dashboard"}</Link>&nbsp;
         <h1>View Request {requestId}</h1>
       </div>
-      <dl className="row-md jh-entity-details">
-        <>
-          <dt>
-            <span>Description</span>
-          </dt>
-          <dd>
-            <span>{request?.description ?? "N/A"}</span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Description</span>
-          </dt>
-          <dd>
-            <span>{request?.description ?? "N/A"}</span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Status</span>
-          </dt>
-          <dd>
-            <span>{request?.status ?? "N/A"}</span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Type</span>
-          </dt>
-          <dd>
-            <span>{request?.type ?? "N/A"}</span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Resources</span>
-          </dt>
-          <dd>
-            <span>
-              {request?.resources.map((resource) => (
-                <span key={resource}>{resource} </span>
-              )) ?? "N/A"}
-            </span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Assigned User</span>
-          </dt>
-          <dd>
-            <span>{request?.userId ?? "N/A"}</span>
-          </dd>
-        </>
-        <>
-          <dt>
-            <span>Assigned Company</span>
-          </dt>
-          <dd>
-            <span>{request?.companyId ?? "N/A"}</span>
-          </dd>
-        </>
-      </dl>
+      <RequestForm
+        initialValue={request}
+        onSubmit={async () => {}}
+        mode="View"
+      />
     </div>
   )
 }

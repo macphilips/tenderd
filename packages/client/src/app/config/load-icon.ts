@@ -8,6 +8,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt"
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
 import { faEdit, faPenAlt } from "@fortawesome/free-solid-svg-icons"
 import { faPen } from "@fortawesome/free-solid-svg-icons/faPen"
+import { faEye } from "@fortawesome/free-solid-svg-icons/faEye"
 
 export const loadIcons = () => {
   library.add(
@@ -20,6 +21,7 @@ export const loadIcons = () => {
     faSpinner,
     faEdit,
     faPen,
-    faPenAlt
+    faPenAlt,
+    faEye
   )
 }

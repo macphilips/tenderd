@@ -9,18 +9,24 @@ export function TextInput(props: {
   type: "text" | "password" | "email"
   testId?: string
   color?: "light" | "dark"
+  disabled?: boolean
 }) {
   const {
     value,
     onChange,
+    disabled = false,
     required = false,
     label,
     type,
     color = "light"
   } = props
   return (
-    <div data-testid={props.testId} className={`${styles.fieldWrap} ${styles[color]}`}>
+    <div
+      data-testid={props.testId}
+      className={`${styles.fieldWrap} ${styles[color]}`}
+    >
       <input
+        disabled={disabled}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -30,7 +36,7 @@ export function TextInput(props: {
       />
       <label>
         {label}
-        {required && <span className={styles.req}>*</span>}
+        {!disabled && required && <span className={styles.req}>*</span>}
       </label>
     </div>
   )

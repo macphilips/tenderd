@@ -1,3 +1,5 @@
+import moment, { Moment } from "moment"
+
 export enum RequestType {
   REPLACEMENT = "Replacement",
   MAINTENANCE = "Maintenance",
@@ -31,16 +33,26 @@ export interface Request {
   resources: string[]
   type: RequestType
   status: RequestStatus
-  userId: string
+  assignedUserId: string
+  assignedUserName: string
   companyId: string
+  companyName: string
+  createdAt: Moment
+  updatedAt: Moment
+  eventLogs?: RequestEventLog[]
 }
 
-export interface RequestEventLogType {
+export enum RequestEventLogType {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE"
 }
 
 export interface RequestEventLog {
-  itemId: string
-  type: RequestEventLog
+  id: string
+  status: RequestStatus
+  type: RequestEventLogType
   actorId: string
+  actorName: string
   timestamp: string
+  model: "RequestEventLog"
 }

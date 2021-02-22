@@ -2,6 +2,7 @@ import axios from "axios"
 import { SignUpData } from "../components/forms/SignUpForm"
 import firebase from "firebase"
 import { Company, Request, User } from "./types"
+import moment from "moment"
 
 export type ApiResponse = {
   success: boolean
@@ -15,7 +16,7 @@ export interface APIService {
 
   getUsers(): Promise<{ users: User[] }>
 
-  getRequests(): Promise<{ requests: Request[] }>
+  getRequestsForAuthUserCompany(): Promise<{ requests: Request[] }>
 
   updateRequest(request: Request): Promise<Request>
 
@@ -24,6 +25,10 @@ export interface APIService {
   getRequestById(id: string): Promise<Request>
 
   removeUserFromCompany(id: string): Promise<ApiResponse>
+
+  getUsersWithinAuthUserCompany(): Promise<{ users: User[] }>
+
+  getUsersByCompany(companyId: string): Promise<{ users: User[] }>
 }
 
 export class AuthService {
@@ -88,6 +93,16 @@ export class AuthService {
     const res = await axios.get<{ companies: Company[] }>("companies")
     return res.data
   }
+
+  async getAuthUserCompany(): Promise<Company | null> {
+    const [{ companies }, authUser] = await Promise.all([
+      this.getAllCompanies(),
+      this.getCurrentUser()
+    ])
+    return (
+      companies.find((company) => company.id === authUser.companyId) ?? null
+    )
+  }
 }
 
 export class APIServiceImpl implements APIService {
@@ -99,14 +114,17 @@ export class APIServiceImpl implements APIService {
     })
   }
 
-  async getRequests(): Promise<{ requests: Request[] }> {
+  async getRequestsForAuthUserCompany(): Promise<{ requests: Request[] }> {
     const response = await axios.get<{ requests: Request[] }>("requests")
     return response.data
   }
 
   async getRequestById(id: string): Promise<Request> {
     const response = await axios.get<Request>(`requests/${id}`)
-    return response.data
+    const request = { ...response.data }
+    request.createdAt = moment(request.createdAt)
+    request.updatedAt = moment(request.updatedAt)
+    return request
   }
 
   async updateRequest(request: Request): Promise<Request> {
@@ -114,21 +132,33 @@ export class APIServiceImpl implements APIService {
   }
 
   async createRequest(request: Request): Promise<Request> {
-    return await axios.put<Request, Request>(`requests`, request)
+    return await axios.post<Request, Request>(`requests`, request)
   }
 
-  async getUsers(): Promise<{ users: User[] }> {
+  async getUsersWithinAuthUserCompany(): Promise<{ users: User[] }> {
     const response = await axios.get<{ users: User[] }>("companies/users")
     return response.data
   }
 
   async removeUserFromCompany(id: string): Promise<ApiResponse> {
-    const res = await axios.get<ApiResponse>(`companies/users/${id}`)
+    const res = await axios.delete<ApiResponse>(`companies/users/${id}`)
     return res.data
   }
 
   async updateUser(user: Partial<User>): Promise<User> {
     const res = await axios.put(`users/${user.id}`, user)
     return user as User
+  }
+
+  async getUsers(): Promise<{ users: User[] }> {
+    const res = await axios.get<{ users: User[] }>("/users")
+    return res.data
+  }
+
+  async getUsersByCompany(companyId: string): Promise<{ users: User[] }> {
+    const res = await axios.get<{ users: User[] }>(
+      `companies/${companyId}/users`
+    )
+    return res.data
   }
 }

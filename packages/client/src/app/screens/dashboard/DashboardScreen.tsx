@@ -4,17 +4,21 @@ import { Request } from "../../services/types"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
 import { Table } from "../../components/Table"
 import { ViewRequestContainer } from "./ViewRequestContainer"
-import { EditRequestContainer } from "./EditRequestContainer"
-import { NewRequestContainer } from "./NewRequestContainer"
+import { EditOrCreateRequestContainer } from "./EditOrCreateRequestContainer"
 import styles from "./Dashboard.module.scss"
 import { Loader } from "../../components/Loader"
+import moment, { Moment } from "moment"
 
 export function DashboardScreen() {
   const { path } = useRouteMatch()
   return (
     <Switch>
       <Route exact path={`${path}`} component={Main} />
-      <Route exact path={`${path}/new`} component={NewRequestContainer} />
+      <Route
+        exact
+        path={`${path}/new`}
+        component={() => <EditOrCreateRequestContainer mode="Create" />}
+      />
       <Route
         exact
         path={`${path}/view/:requestId`}
@@ -22,7 +26,7 @@ export function DashboardScreen() {
       />
       <Route
         path={`${path}/edit/:requestId`}
-        component={EditRequestContainer}
+        component={() => <EditOrCreateRequestContainer mode="Edit" />}
       />
     </Switch>
   )
@@ -38,11 +42,12 @@ export function Main() {
     const getRequest = async () => {
       try {
         setLoading(true)
-        const { requests } = await api.getRequests()
-        setLoading(false)
+        const { requests } = await api.getRequestsForAuthUserCompany()
         setRequests(requests)
       } catch (e) {
         //TODO: Show snack notification here
+      } finally {
+        setLoading(false)
       }
     }
     getRequest()
@@ -50,8 +55,10 @@ export function Main() {
 
   if (loading) return <Loader />
 
+  const dateFormatter = (value: Moment) =>
+    moment(value).format("DD/MM/YYY HH:mm")
   return (
-    <div className={[styles.root, "container"].join(" ")}>
+    <div className={[styles.root, ""].join(" ")}>
       <div className={styles.header}>
         <h1>Dashboard</h1>
         <button
@@ -68,10 +75,19 @@ export function Main() {
           { field: "description", label: "Description" },
           { field: "status", label: "Status" },
           { field: "type", label: "Type" },
-          { field: "userId", label: "Assigned User" },
-          { field: "companyId", label: "Assigned Company" }
+          { field: "assignedUserName", label: "Assigned User" },
+          {
+            field: "createdAt",
+            label: "Created Date",
+            formatter: dateFormatter
+          },
+          {
+            field: "updatedAt",
+            label: "Last Modified",
+            formatter: dateFormatter
+          }
         ]}
-        actions={[{ title: "Edit", icon: "pencil" }]}
+        actions={[{ title: "Edit", icon: "pencil-alt" }]}
         onActionItemClick={(title, data) => {
           if (title === "Edit") {
             history.push(`${url}/edit/${data.id}`)

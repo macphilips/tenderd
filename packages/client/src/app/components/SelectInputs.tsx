@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import styles from "./CompanySelectInput.module.scss"
+import styles from "./SelectInput.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 export type Option = { text: string; value: any }
@@ -13,10 +13,17 @@ type Props = {
   color?: "light" | "dark"
   loading?: boolean
   options: Option[]
+  disabled?: boolean
 }
 
 export function SelectInput(props: Props) {
-  const { required = false, label, color = "light", loading = false } = props
+  const {
+    required = false,
+    label,
+    color = "light",
+    loading = false,
+    disabled = false
+  } = props
   const [value, setValue] = useState("")
   const [show, setShow] = useState(false)
 
@@ -30,17 +37,18 @@ export function SelectInput(props: Props) {
       <div className={styles.root}>
         <div className={`${styles.autocompleteDropdown} ${styles[color]}`}>
           <input
+            disabled={disabled}
             className={styles.input}
             value={value}
             onChange={() => {}}
             required={required}
             placeholder=" "
             autoComplete="off"
-            onFocus={() => setShow(true)}
+            onClick={() => setShow(!show)}
           />
           <label>
             {label}
-            {required && <span className={styles.req}>*</span>}
+            {!disabled && required && <span className={styles.req}>*</span>}
           </label>
           <span className={styles.inputArrow}>
             {loading ? (
@@ -54,7 +62,10 @@ export function SelectInput(props: Props) {
           </span>
         </div>
         <div
-          className={[styles.listContainer, show ? styles.show : ""].join(" ")}
+          className={[
+            styles.listContainer,
+            !disabled && show ? styles.show : ""
+          ].join(" ")}
         >
           <ul className={styles.list}>
             {props.options.map(({ text, value }) => (
