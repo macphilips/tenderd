@@ -1,9 +1,11 @@
 import { Link, useParams } from "react-router-dom"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
 import { Request } from "../../services/types"
 import { Loader } from "../../components/Loader"
 import { RequestForm } from "../../components/forms/RequestForm"
+import { Timeline, TimelineHistory } from "../../components/Timeline"
+import moment from "moment"
 
 export function ViewRequestContainer() {
   const { requestId } = useParams<{ requestId: string }>()
@@ -27,17 +29,28 @@ export function ViewRequestContainer() {
   }, [requestId])
   if (loading) return <Loader />
 
+  const eventLogs = request?.eventLogs || []
+  const timeline: TimelineHistory[] = eventLogs.map((log, index, array) => {
+    // starting from the most recent
+    const { timestamp, status, actorName, type } = log
+    let title: string
+    if (index < eventLogs.length - 1) {
+      const prevLog = array[index + 1]
+      title = `${actorName} updated request from ${prevLog.status} to ${status}`
+    } else {
+      title = `Request created by ${actorName}`
+    }
+    return { time: moment(timestamp), title }
+  })
+
   return (
     <div className="container">
-      <div>
-        <h1>View Request</h1>
-      </div>
-      <br />
       <RequestForm
         initialValue={request}
         onSubmit={async () => {}}
         mode="View"
       />
+      <Timeline label="Status Change History" history={timeline} />
     </div>
   )
 }

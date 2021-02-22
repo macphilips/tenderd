@@ -135,6 +135,7 @@ export function RequestForm(props: Props) {
     <div id="requestForm">
       <h1>{title}</h1>
       <hr />
+      <br />
       <form>
         <TextInput
           disabled={disabled}
