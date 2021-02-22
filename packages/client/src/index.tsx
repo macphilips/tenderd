@@ -16,6 +16,10 @@ const auth = firebase.auth()
 
 setupAxiosInterceptors(auth)
 
+if (process.env.REACT_APP_USE_FIREBASE_EMULATOR) {
+  auth.useEmulator("http://localhost:9099")
+}
+
 const service: Service = {
   auth: new AuthService(auth),
   api: new APIServiceImpl()
