@@ -1,5 +1,6 @@
 import UserRepository from "./user.repository"
 import { Request, Response } from "express"
+import HttpError from "../errors/HttpError"
 
 class UserController {
   private repository: UserRepository
@@ -32,7 +33,10 @@ class UserController {
    *              items:
    *                $ref: '#/definitions/User'
    */
-  async getAllUsers(req: Request, res: Response) {}
+  async getAllUsers(req: Request, res: Response) {
+    const { results: users } = await this.repository.findAllUsers()
+    res.status(200).json({ users })
+  }
 
   /**
    * @swagger
@@ -69,7 +73,11 @@ class UserController {
    *            $ref: '#/definitions/User'
    */
   async updateUser(req: Request, res: Response) {
+    const { id } = req.params
     const { name, companyId } = req.body
+    if (companyId === null) throw new HttpError("ERR_01", 400, "companyId")
+    const user = await this.repository.updateUser({ id, name, companyId })
+    res.status(200).json(user)
   }
 }
 

@@ -1,9 +1,14 @@
 import { auth } from "firebase-admin"
 import { User } from "../../datasource/types"
 import HttpError from "../errors/HttpError"
+import { UserModel } from "../../datasource/models"
+import UserRepository from "../user/user.repository"
 
 class AuthService {
-  constructor(private firebaseAuthService: auth.Auth) {}
+  constructor(
+    private firebaseAuthService: auth.Auth,
+    private datasource: UserRepository
+  ) {}
 
   async verifyToken(token: string) {
     try {
@@ -18,7 +23,7 @@ class AuthService {
     email: string
     name: string
     password: string
-  }): Promise<User> {
+  }): Promise<Partial<User>> {
     try {
       const { email, name, password } = user
 
@@ -28,15 +33,12 @@ class AuthService {
         displayName: name
       })
 
-      return {
-        id: uid,
-        email,
-        name,
-        password: (null as unknown) as string
-      }
+      await this.datasource.create(UserModel.create({ id: uid, email, name }))
+
+      return { id: uid, email, name }
     } catch (e) {
       console.log(e)
-      throw new HttpError("", 500)
+      throw new HttpError("", 500, undefined, e.message)
     }
   }
 }
