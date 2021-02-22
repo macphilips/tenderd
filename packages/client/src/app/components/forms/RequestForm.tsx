@@ -201,6 +201,16 @@ export function RequestForm(props: Props) {
           required={true}
           label="Assign Author"
         />
+        {request.resources.length > 0 && (
+          <div>
+            <label>Images/Documents Links</label>
+            {request.resources.map((resource) => (
+              <a href={resource} target="_blank">
+                {resource}
+              </a>
+            ))}
+          </div>
+        )}
         {props.mode !== "View" && (
           <>
             <label>Upload Images/Documents</label>
