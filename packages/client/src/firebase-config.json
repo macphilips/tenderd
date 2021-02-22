@@ -1,9 +1,10 @@
 {
-  "apiKey": "AIzaSyARk5np7nztaPSV3tbt8XZKY3PoFxXBVaA",
-  "authDomain": "tenderd-e2088.firebaseapp.com",
-  "projectId": "tenderd-e2088",
-  "storageBucket": "tenderd-e2088.appspot.com",
-  "messagingSenderId": "47964030099",
-  "appId": "1:47964030099:web:9208eec476a53191aeb966",
-  "measurementId": "G-4BFT8TSDE7"
+  "apiKey": "AIzaSyAReOnBJWp63aOErLNCbRAoXNG7Xz8sXOs",
+  "authDomain": "tenderd-28498.firebaseapp.com",
+  "databaseURL": "https://tenderd-28498-default-rtdb.firebaseio.com",
+  "projectId": "tenderd-28498",
+  "storageBucket": "tenderd-28498.appspot.com",
+  "messagingSenderId": "240834007449",
+  "appId": "1:240834007449:web:ae5a809268422c21a3c308",
+  "measurementId": "G-ER8VDRT22Q"
 }
