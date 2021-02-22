@@ -203,9 +203,11 @@ export function RequestForm(props: Props) {
           <div>
             <label>Images/Documents Links</label>
             {request.resources.map((resource) => (
-              <a href={resource} target="_blank">
-                {resource}
-              </a>
+              <div>
+                <a href={resource} target="_blank">
+                  {resource}
+                </a>
+              </div>
             ))}
           </div>
         )}
