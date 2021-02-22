@@ -12,5 +12,10 @@ export function SignupContainer() {
     await auth.login(email, password)
     history.push("/auth/select-company")
   }
+  console.log(
+    "Using firebase emulator",
+    process.env.REACT_APP_USE_FIREBASE_EMULATOR === "true"
+  )
+
   return <SignUpForm onSubmit={onSignUp} />
 }
