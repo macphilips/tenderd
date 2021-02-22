@@ -20,6 +20,7 @@ export const secureRoutes = (
     // }
 
     ;(req as any).authUserId = authUserId
+    ;(req as any).authUserId = user?.name
     ;(req as any).companyId = user?.companyId
 
     next()

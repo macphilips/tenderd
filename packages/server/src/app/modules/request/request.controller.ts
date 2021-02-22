@@ -1,5 +1,6 @@
 import { Services } from "../../config"
 import { Request, Response } from "express"
+import { Request as RequestObject } from "../../datasource/types"
 
 class RequestController {
   private services: Services
@@ -33,7 +34,18 @@ class RequestController {
    *         schema:
    *            $ref: '#/definitions/Request'
    */
-  async updateRequest(request: Request, res: Response) {}
+  async updateRequest(req: Request, res: Response) {
+    const request = RequestController.getRequestObjectFromBody(req)
+    const result = await this.services.request.updateRequest(request)
+    const { authUserId, authUserName } = req as any
+    await this.services.request.createEventLog(
+      result,
+      authUserId,
+      authUserName,
+      true
+    )
+    res.status(200).json(result)
+  }
 
   /**
    * @swagger
@@ -51,7 +63,7 @@ class RequestController {
    *         schema:
    *           $ref: '#/definitions/Request'
    *     responses:
-   *       200:
+   *       201:
    *         description: Returns the created request
    *         schema:
    *            $ref: '#/definitions/Request'
@@ -60,7 +72,39 @@ class RequestController {
    *         schema:
    *            $ref: '#/definitions/AuthenticationError'
    */
-  async createRequest(request: Request, res: Response) {}
+  async createRequest(req: Request, res: Response) {
+    const request = RequestController.getRequestObjectFromBody(req)
+    const result = await this.services.request.createRequest(request)
+    const { authUserId, authUserName } = req as any
+    await this.services.request.createEventLog(result, authUserId, authUserName)
+    res.status(201).json(result)
+  }
+
+  private static getRequestObjectFromBody(req: Request) {
+    const {
+      id,
+      description,
+      type,
+      status,
+      assignedUserId,
+      assignedUserName,
+      companyId,
+      companyName,
+      resources
+    } = req.body
+    const request = {
+      id,
+      description,
+      type,
+      status,
+      assignedUserId,
+      assignedUserName,
+      companyId,
+      companyName,
+      resources
+    }
+    return request as RequestObject
+  }
 
   /**
    * @swagger
@@ -95,7 +139,7 @@ class RequestController {
         requests: []
       })
     }
-    const requests = await this.services.request.getRequestsUserCompany(
+    const requests = await this.services.request.findAllRequestsForCompany(
       companyId
     )
     return res.status(200).json({
@@ -125,7 +169,9 @@ class RequestController {
    *            $ref: '#/definitions/Request'
    */
   async getRequestById(req: Request, res: Response) {
-    return Promise.resolve(undefined)
+    const { id } = req.params
+    const result = await this.services.request.getRequestById(id)
+    res.status(200).json(result)
   }
 
   /**
@@ -158,12 +204,11 @@ class RequestController {
    *            $ref: '#/definitions/AuthenticationError'
    */
   async getRequestsForUser(req: Request, res: Response) {
+    const { userId } = req.params
     const user = await this.services.user.getUserById((req as any).authUserId)
     const companyId = user?.companyId
     if (companyId === undefined) return
-    const requests = await this.services.request.getRequestsUserCompany(
-      companyId
-    )
+    const requests = await this.services.request.findAllRequestsForUser(userId)
   }
 
   /**
@@ -199,7 +244,7 @@ class RequestController {
     const user = await this.services.user.getUserById((req as any).authUserId)
     const companyId = user?.companyId
     if (companyId === undefined) return
-    const requests = await this.services.request.getRequestsUserCompany(
+    const requests = await this.services.request.findAllRequestsForCompany(
       companyId
     )
   }
