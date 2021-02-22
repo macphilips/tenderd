@@ -12,7 +12,6 @@ enum State {
 type Props = Omit<RouteProps, "render">
 
 export function SecureRoute(props: Props) {
-  // TODO: check if user is authenticated
   const { auth } = useClientAPIService()
   const [state, setState] = useState(State.LOADING)
   useEffect(() => {

@@ -11,7 +11,7 @@ export type ApiResponse = {
 export interface APIService {
   creatUser(email: string, password: string, name: string): Promise<User>
 
-  updateUser(user: User): Promise<User>
+  updateUser(user: Partial<User>): Promise<User>
 
   getUsers(): Promise<{ users: User[] }>
 
@@ -33,15 +33,15 @@ export class AuthService {
   constructor(private auth: firebase.auth.Auth) {
     this.currentUser = null
     this.companies = null
-    auth.onAuthStateChanged((firebaseUser) => {
+    auth.onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
-        this.getAuthUser().then((user) => {
-          this.currentUser = user
-        })
-      }
-      this.getAllCompanies().then(({ companies }) => {
+        const [user, { companies }] = await Promise.all([
+          this.getAuthUser(),
+          this.getAllCompanies()
+        ])
         this.companies = companies
-      })
+        this.currentUser = user
+      }
     })
   }
 
@@ -69,7 +69,11 @@ export class AuthService {
     return response.data
   }
 
-  async getCurrentUser(): Promise<User> {
+  async getCurrentUser(force?: boolean): Promise<User> {
+    if (force) {
+      this.currentUser = null
+    }
+
     if (this.currentUser !== null) {
       return this.currentUser
     }
@@ -123,7 +127,8 @@ export class APIServiceImpl implements APIService {
     return res.data
   }
 
-  updateUser(user: User): Promise<User> {
-    throw new Error("Method not implemented.")
+  async updateUser(user: Partial<User>): Promise<User> {
+    const res = await axios.put(`users/${user.id}`, user)
+    return user as User
   }
 }

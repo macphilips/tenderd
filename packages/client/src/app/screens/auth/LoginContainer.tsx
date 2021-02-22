@@ -8,9 +8,16 @@ export function LoginContainer() {
   const history = useHistory()
 
   const onLogin = async ({ email, password }: Login) => {
-    const uid = await auth.login(email, password)
-    if (uid) {
-      return history.push("/dashboard")
+    try {
+      await auth.login(email, password)
+      const user = await auth.getCurrentUser()
+      if (user.companyId) {
+        return history.replace("/dashboard")
+      } else {
+        history.push("/auth/select-company")
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
   return <LoginForm onSubmit={onLogin} />
