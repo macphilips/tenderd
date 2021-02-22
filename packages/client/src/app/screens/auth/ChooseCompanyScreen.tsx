@@ -4,8 +4,10 @@ import styles from "./SignupOrLoginScreen.module.scss"
 import { useHistory } from "react-router-dom"
 import { CompanySelectInput } from "../../components/CompanySelectInput"
 import { Button } from "../../components/Button"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function ChooseCompanyScreen() {
+  const { showNotification } = useSnackNotification()
   const history = useHistory()
   const [selectedCompanyId, setSelectedValue] = useState("")
   const [saving, setSaving] = useState(false)
@@ -18,7 +20,7 @@ export function ChooseCompanyScreen() {
       setSaving(false)
       history.replace("/dashboard")
     } catch (e) {
-      // TODO: Show error notification
+      showNotification("Unable update user")
       setSaving(false)
     }
   }

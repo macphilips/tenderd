@@ -6,12 +6,15 @@ import { Loader } from "../../components/Loader"
 import { RequestForm } from "../../components/forms/RequestForm"
 import { Timeline, TimelineHistory } from "../../components/Timeline"
 import moment from "moment"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function ViewRequestContainer() {
   const { requestId } = useParams<{ requestId: string }>()
   const { api } = useClientAPIService()
   const [request, setRequest] = useState<Request>()
   const [loading, setLoading] = useState(false)
+  const { showNotification } = useSnackNotification()
+
   useEffect(() => {
     const getRequestById = async () => {
       try {
@@ -20,7 +23,7 @@ export function ViewRequestContainer() {
         setLoading(true)
         setRequest(request)
       } catch (e) {
-        //TODO: Show error notification
+        showNotification("Unable to fetch Request")
       } finally {
         setLoading(false)
       }

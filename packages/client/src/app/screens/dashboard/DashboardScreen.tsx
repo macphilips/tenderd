@@ -8,6 +8,7 @@ import { EditOrCreateRequestContainer } from "./EditOrCreateRequestContainer"
 import styles from "./Dashboard.module.scss"
 import { Loader } from "../../components/Loader"
 import moment, { Moment } from "moment"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function DashboardScreen() {
   const { path } = useRouteMatch()
@@ -38,6 +39,7 @@ export function Main() {
   const { api } = useClientAPIService()
   const [loading, setLoading] = useState(false)
   const [requests, setRequests] = useState<Request[]>([])
+  const { showNotification } = useSnackNotification()
   useEffect(() => {
     const getRequest = async () => {
       try {
@@ -45,7 +47,7 @@ export function Main() {
         const { requests } = await api.getRequestsForAuthUserCompany()
         setRequests(requests)
       } catch (e) {
-        //TODO: Show snack notification here
+        showNotification("Unable to load request list")
       } finally {
         setLoading(false)
       }

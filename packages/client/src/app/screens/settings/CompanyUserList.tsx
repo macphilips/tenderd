@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
 import { User } from "../../services/types"
 import { Loader } from "../../components/Loader"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function CompanyUserList() {
   const { api, auth } = useClientAPIService()
@@ -10,6 +11,7 @@ export function CompanyUserList() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(false)
   const loadRef = useRef<boolean>()
+  const { showNotification } = useSnackNotification()
 
   useEffect(() => {
     loadRef.current = true
@@ -23,7 +25,7 @@ export function CompanyUserList() {
         setLoggedInUser(loggedInUser)
         setUsers(users)
       } catch (e) {
-        //TODO: Show error notification
+        showNotification("Unable to load User record")
       } finally {
         setLoading(false)
       }
@@ -35,18 +37,18 @@ export function CompanyUserList() {
   async function removeUserFromList(data: User) {
     try {
       if (data.id === loggedInUser?.id) {
-        // TODO: show notification
+        showNotification("You cannot remove yourself from company")
         return
       }
       await api.removeUserFromCompany(data.id)
       await api.getUsersWithinAuthUserCompany()
     } catch (e) {
-      // TODO: show error
+      showNotification("Unable to remove user from company")
     }
   }
 
   const onActionItemClick = async (title: string, data: User) => {
-    if (title === "Delete") {
+    if (title === "Remove user from company") {
       await removeUserFromList(data)
     }
   }
@@ -59,7 +61,7 @@ export function CompanyUserList() {
           { field: "name", label: "Name" },
           { field: "email", label: "Email" }
         ]}
-        actions={[{ title: "Delete", icon: "trash-alt" }]}
+        actions={[{ title: "Remove user from company", icon: "trash-alt" }]}
         onActionItemClick={onActionItemClick}
       />
     </>

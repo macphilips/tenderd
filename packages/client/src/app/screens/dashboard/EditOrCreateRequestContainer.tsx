@@ -14,6 +14,7 @@ import {
 import React, { useEffect, useState } from "react"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
 import { Loader } from "../../components/Loader"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function EditOrCreateRequestContainer(props: { mode: Mode }) {
   const history = useHistory()
@@ -21,6 +22,7 @@ export function EditOrCreateRequestContainer(props: { mode: Mode }) {
   const { api } = useClientAPIService()
   const [request, setRequest] = useState<Request | undefined>()
   const [loading, setLoading] = useState(false)
+  const { showNotification } = useSnackNotification()
 
   useEffect(() => {
     const getRequestById = async () => {
@@ -29,11 +31,10 @@ export function EditOrCreateRequestContainer(props: { mode: Mode }) {
         setLoading(true)
         let request
         request = await api.getRequestById(requestId)
-
         setRequest(request)
         setLoading(false)
       } catch (e) {
-        //TODO: Show error notification
+        showNotification("Unable to fetch Request")
         setLoading(false)
       }
     }

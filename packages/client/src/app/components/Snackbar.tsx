@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from "react"
+import React, { createContext, ReactNode, useEffect, useState } from "react"
 import styles from "./Snackbar.module.scss"
 
 type Props = {
@@ -29,34 +23,4 @@ export function Snackbar(props: Props) {
       <button className={styles.btn}>Dismiss</button>
     </div>
   )
-}
-
-const SnackNotification = createContext<{
-  showNotification: (message: string) => void
-} | null>(null)
-
-export function SnackProvider(props: { children: ReactNode }) {
-  const [show, setShow] = useState(false)
-  const [message, setMessage] = useState("")
-  const showNotification = (message: string) => {
-    setMessage(message)
-    setShow(true)
-  }
-  const onDismiss = () => {
-    setMessage("")
-    setShow(false)
-  }
-  return (
-    <SnackNotification.Provider value={{ showNotification }}>
-      {props.children}
-      <Snackbar message={message} show={show} onDismiss={onDismiss} />
-    </SnackNotification.Provider>
-  )
-}
-
-function useSnackNotification() {
-  const context = useContext(SnackNotification)
-  if (context) throw new Error("Not configured")
-
-  return context
 }

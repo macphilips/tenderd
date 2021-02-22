@@ -3,12 +3,14 @@ import { TextInput } from "../InputText"
 import { Button } from "../Button"
 import styles from "./Form.module.scss"
 import { Snackbar } from "../Snackbar"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export type SignUpData = { email: string; password: string; name: string }
 
 export function SignUpForm(props: {
   onSubmit: (user: SignUpData) => Promise<void>
 }) {
+  const { showNotification } = useSnackNotification()
   const [saving, setSaving] = useState(false)
   const [user, setUser] = useState<SignUpData>({
     email: "",
@@ -29,7 +31,7 @@ export function SignUpForm(props: {
     } catch (e) {
       // TODO: better error notification
       setSaving(false)
-      setError("Error creating user.")
+      showNotification("Error creating user.")
     }
   }
 

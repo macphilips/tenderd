@@ -3,12 +3,14 @@ import React, { useEffect, useRef, useState } from "react"
 import { User } from "../../services/types"
 import { Loader } from "../../components/Loader"
 import { ProfileForm } from "../../components/forms/ProfileForm"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export function ProfileContainer() {
   const { auth, api } = useClientAPIService()
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
   const loadRef = useRef<boolean>()
+  const { showNotification } = useSnackNotification()
 
   useEffect(() => {
     loadRef.current = true
@@ -18,7 +20,7 @@ export function ProfileContainer() {
         const loggedInUser = await auth.getCurrentUser()
         if (loadRef.current) setLoggedInUser(loggedInUser)
       } catch (e) {
-        //TODO: Show error notification
+        showNotification("Unable to fetch user details")
       } finally {
         if (loadRef.current) setLoading(false)
       }
@@ -37,7 +39,7 @@ export function ProfileContainer() {
     try {
       await api.updateUser(user)
     } catch (e) {
-      //TODO: Show notification
+      showNotification("Unable to update user")
     }
   }
 

@@ -3,6 +3,7 @@ import { TextInput } from "../InputText"
 import { Button } from "../Button"
 import styles from "./Form.module.scss"
 import { Snackbar } from "../Snackbar"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 export type Login = {
   email: string
@@ -10,6 +11,7 @@ export type Login = {
 }
 
 export function LoginForm(props: { onSubmit: (user: Login) => Promise<void> }) {
+  const { showNotification } = useSnackNotification()
   const [saving, setSaving] = useState(false)
   const [login, setLogin] = useState<Login>({ email: "", password: "" })
   const [error, setError] = useState<string>()
@@ -23,7 +25,7 @@ export function LoginForm(props: { onSubmit: (user: Login) => Promise<void> }) {
       await props.onSubmit(login)
     } catch (e) {
       setSaving(false)
-      setError("Error logging into the app.")
+      showNotification("Error logging into the app.")
     }
   }
 
