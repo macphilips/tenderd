@@ -36,14 +36,12 @@ class RequestController {
    */
   async updateRequest(req: Request, res: Response) {
     const request = RequestController.getRequestObjectFromBody(req)
-    const result = await this.services.request.updateRequest(request)
     const { authUserId, authUserName } = req as any
-    await this.services.request.createEventLog(
-      result,
+    const result = await this.services.request.updateRequest(request, {
       authUserId,
-      authUserName,
-      true
-    )
+      authUserName
+    })
+
     res.status(200).json(result)
   }
 
@@ -74,9 +72,11 @@ class RequestController {
    */
   async createRequest(req: Request, res: Response) {
     const request = RequestController.getRequestObjectFromBody(req)
-    const result = await this.services.request.createRequest(request)
     const { authUserId, authUserName } = req as any
-    await this.services.request.createEventLog(result, authUserId, authUserName)
+    const result = await this.services.request.createRequest(request, {
+      authUserId,
+      authUserName
+    })
     res.status(201).json(result)
   }
 

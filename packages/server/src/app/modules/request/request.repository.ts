@@ -30,17 +30,31 @@ class RequestRepository extends Repository<Request> {
     return { ...request, eventLogs }
   }
 
-  async updateRequest(request: Partial<Request>): Promise<Request> {
+  async updateRequest(
+    request: Partial<Request>,
+    audit: { authUserName: string; authUserId: string }
+  ): Promise<Request> {
     // TODO: move update logic into parent class
     if (!request.id) throw new Error("User id cannot be null")
     const result = await this.getRequestById(request.id)
     if (result == undefined) throw Error("Request not found")
     const update = { ...result, ...request, updatedAt: new Date() }
     await this.update(RequestModel.create(update))
+    if (result.status != request.status) {
+      await this.createEventLog(
+        result,
+        audit.authUserId,
+        audit.authUserName,
+        true
+      )
+    }
     return update
   }
 
-  async createRequest(request: Request): Promise<Request> {
+  async createRequest(
+    request: Request,
+    audit: { authUserName: string; authUserId: string }
+  ): Promise<Request> {
     const data = { ...request }
     const pk = this.model.pkField
     if (!data[pk]) {
@@ -52,6 +66,7 @@ class RequestRepository extends Repository<Request> {
         ...data
       })
     )
+    await this.createEventLog(data, audit.authUserId, audit.authUserName)
     return data
   }
 
