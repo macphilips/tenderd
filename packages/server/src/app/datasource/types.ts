@@ -1,6 +1,12 @@
 interface Model {
   model: string
 }
+
+interface Audit {
+  updatedAt?: Date
+  created?: Date
+}
+
 enum RequestType {
   REPLACEMENT = "Replacement",
   MAINTENANCE = "Maintenance",
@@ -15,7 +21,7 @@ enum RequestStatus {
   CANCELLED = "Cancelled"
 }
 
-export interface User {
+export interface User extends Audit {
   id: string
   name: string
   email: string
@@ -24,31 +30,37 @@ export interface User {
   model: "User"
 }
 
-export interface Company {
+export interface Company extends Audit {
   id: string
   name: string
   model: "Company"
 }
 
-export interface Request {
+export interface Request extends Audit {
   id: string
   description: string
   resources: string[]
   type: RequestType
   status: RequestStatus
-  userId: string
+  assignedUserId: string
+  assignedUserName: string
   companyId: string
-  createdAt: string
-  updatedAt: string
+  companyName: string
+  eventLogs?: RequestEventLog[]
   model: "Request"
 }
 
-export enum RequestEventLogType {}
+export enum RequestEventLogType {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE"
+}
 
 export interface RequestEventLog {
-  itemId: string
+  id: string
+  status: RequestStatus
   type: RequestEventLogType
   actorId: string
+  actorName: string
   timestamp: string
   model: "RequestEventLog"
 }
