@@ -1,0 +1,58 @@
+@import "../../styles/Colors";
+
+.root {
+  padding: 16px;
+  border: 1px solid rgb(232, 232, 232);
+  border-radius: 3px;
+  width: 100%;
+  display: inline-block;
+  min-height: 200px;
+  margin-bottom: 16px;
+
+  .thumbsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .thumb {
+    display: inline-flex;
+    border-radius: 2px;
+    border: 1px solid #eaeaea;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    width: 100px;
+    height: 100px;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+
+  .thumbInner {
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .img {
+    display: block;
+    width: auto;
+    height: 100%;
+  }
+}
+.dropzone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: rgb(232, 232, 232);
+  border-style: dashed;
+  background-color: #fafafa;
+  color: #bdbdbd;
+  outline: none;
+  transition: border 0.24s ease-in-out;
+  margin-bottom: 16px;
+}

@@ -11,6 +11,8 @@ import {
 } from "../../services/types"
 import moment from "moment"
 import { useClientAPIService } from "../../hooks/useClientAPIService"
+import { FileUploads } from "./FileUploads"
+import { useSnackNotification } from "../../hooks/useSnackNotification"
 
 const requestStatusOptions = [
   { text: RequestStatus.CREATED, value: RequestStatus.CREATED },
@@ -41,6 +43,7 @@ export const defaultRequestValue: Request = {
 }
 
 export type Mode = "Edit" | "Create" | "View"
+
 type Props = {
   onSubmit: (user: Request) => Promise<void>
   initialValue?: Request
@@ -48,6 +51,7 @@ type Props = {
 }
 
 export function RequestForm(props: Props) {
+  const { showNotification } = useSnackNotification()
   const { api, auth } = useClientAPIService()
   const [users, setUsers] = useState<User[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
@@ -57,14 +61,18 @@ export function RequestForm(props: Props) {
 
   const [loadingCompany, setLoadingCompany] = useState(false)
   const [loadingUser, setLoadingUser] = useState(false)
-
   const [saving, setSaving] = useState(false)
+  const [files, setFiles] = useState<File[]>([])
+  const [uploadStatus, setUploadStatus] = useState("")
 
   const [request, setRequest] = useState<Request>(
     props.initialValue || defaultRequestValue
   )
 
+  const onChangeFile = (selectedFiles: File[]) => setFiles(selectedFiles)
+
   useEffect(() => {
+    if (disabled) return
     const getAllCompanies = async () => {
       try {
         setLoadingCompany(true)
@@ -84,6 +92,8 @@ export function RequestForm(props: Props) {
   }, [])
 
   useEffect(() => {
+    if (disabled) return
+
     if (!request.companyId) return
 
     const loadUsersByCompany = async () => {
@@ -113,6 +123,9 @@ export function RequestForm(props: Props) {
   const onSubmit = async () => {
     try {
       setSaving(true)
+      setUploadStatus(`Uploading files ${files.length}`)
+      console.log(`Uploading files ${files.length}`)
+      const urls = await api.uploadFiles(files)
       const { assignedUserId, companyId } = request
       const assignedUserName =
         users.find(({ id }) => id === assignedUserId)?.name ?? ""
@@ -122,10 +135,14 @@ export function RequestForm(props: Props) {
       await props.onSubmit({
         ...request,
         assignedUserName,
-        companyName
+        companyName,
+        resources: [...request.resources, ...urls]
       })
+      console.log(`Uploaded`)
+      setUploadStatus(`Uploaded`)
     } catch (e) {
-      setSaving(true)
+      setSaving(false)
+      showNotification("Failed to save changes")
     }
   }
 
@@ -184,6 +201,13 @@ export function RequestForm(props: Props) {
           required={true}
           label="Assign Author"
         />
+        {props.mode !== "View" && (
+          <>
+            <label>Upload Images/Documents</label>
+            <FileUploads onChange={onChangeFile} />
+            <p>{uploadStatus}</p>
+          </>
+        )}
         {!disabled && (
           <Button loading={saving} label="Save" onClick={onSubmit} />
         )}

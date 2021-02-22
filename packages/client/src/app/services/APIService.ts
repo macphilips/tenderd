@@ -29,6 +29,8 @@ export interface APIService {
   getUsersWithinAuthUserCompany(): Promise<{ users: User[] }>
 
   getUsersByCompany(companyId: string): Promise<{ users: User[] }>
+
+  uploadFiles(files: File[]): Promise<string[]>
 }
 
 export class AuthService {
@@ -160,5 +162,15 @@ export class APIServiceImpl implements APIService {
       `companies/${companyId}/users`
     )
     return res.data
+  }
+
+  async uploadFiles(files: File[]): Promise<string[]> {
+    return await Promise.all(files.map((file) => this.uploadFile(file)))
+  }
+
+  private async uploadFile(file: File): Promise<string> {
+    const storageRef = firebase.storage().ref()
+    const uploadTask = await storageRef.child("images/" + file.name).put(file)
+    return await uploadTask.ref.getDownloadURL()
   }
 }
